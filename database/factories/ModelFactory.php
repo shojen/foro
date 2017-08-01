@@ -28,6 +28,10 @@ $factory->define(App\Post::class, function (Faker\Generator $faker) {
     return [
         'title' => $faker->sentence,
         'content' => $faker->paragraph,
-        'pending' => $faker->boolean(),        
+        'pending' => $faker->boolean(),  
+        'user_id' => function(){
+            // En el caso de que no se asigne user_id a la prueba, se creará un usuario nuevo entrando en esta función, En caso contrario se tomará el usuario que se le asigne a la prueba, en el caso que estamos tratando, es el usuario por defecto que contenga como nombre Angel Rosso
+            return factory(App\User::class)->create()->id;
+        },      
     ];
 });
