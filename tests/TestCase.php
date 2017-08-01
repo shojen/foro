@@ -41,4 +41,5 @@ abstract class TestCase extends Illuminate\Foundation\Testing\TestCase
     {
         return factory(\App\Post::class)->create($attributes);
     }
+
 }
