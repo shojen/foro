@@ -14,5 +14,12 @@
             </div>
         </div>
     </div>
+    <div class="row">
+        <h4>Comentarios:</h4>
+        {!! Form::open(['route'=>['comments.store',$post], 'method'=>'POST']) !!}
+            {!! Field::textarea('comment') !!}
+            {!! Field::submit('Publicar comentario') !!}
+        {!! Form::close() !!}
+    </div>
 </div>
 @endsection
