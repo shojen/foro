@@ -23,6 +23,7 @@ class CreatePostsTable extends Migration
             $table->string('slug');
             $table->mediumText('content');
             $table->boolean('pending')->default(true);
+            $table->integer('answer_id')->unsigned()->nullable();
             $table->timestamps();
         });
     }
