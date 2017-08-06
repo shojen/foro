@@ -21,5 +21,19 @@
             {!! Field::submit('Publicar comentario') !!}
         {!! Form::close() !!}
     </div>
+    <div class="row">
+        
+            @foreach($post->latestComments as $comment)
+                <article class="{{ $comment->answer ? 'answer' : '' }}">
+                    {{ $comment->comment }}
+                    <p class="text-right">Autor: {{ $post->user->name }}</p>
+                    {!! Form::open(['route'=>['comments.accept',$comment],'method'=>'POST']) !!}
+                        <button type="submit">Aceptar respuesta</button>
+                    {!! Form::close() !!}
+
+                </article>
+            @endforeach            
+        
+    </div>
 </div>
 @endsection
