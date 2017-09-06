@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Comment;
-use App\Post;
+use App\{Post,Comment};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class CommentController extends Controller
 {
     public function store(Request $request,Post $post)
-    {
+    {        
     	$v=Validator::make($request->all(),[
     			'comment' => 'required|max:1000'
     		]);
@@ -24,9 +23,9 @@ class CommentController extends Controller
     }
 
     public function accept(Comment $comment)
-    {
+    {   
+        $this->authorize('accept',$comment);
         $comment->MarkAsAnswer();
-        
         return redirect($comment->post->url);
     }
 }

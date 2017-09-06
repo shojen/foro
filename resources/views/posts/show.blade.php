@@ -27,9 +27,11 @@
                 <article class="{{ $comment->answer ? 'answer' : '' }}">
                     {{ $comment->comment }}
                     <p class="text-right">Autor: {{ $post->user->name }}</p>
-                    {!! Form::open(['route'=>['comments.accept',$comment],'method'=>'POST']) !!}
-                        <button type="submit">Aceptar respuesta</button>
-                    {!! Form::close() !!}
+                    @if(Gate::allows('accept', $comment) && !$comment->answer)
+                        {!! Form::open(['route'=>['comments.accept',$comment],'method'=>'POST']) !!}
+                            <button type="submit">Aceptar respuesta</button>
+                        {!! Form::close() !!}
+                    @endif
 
                 </article>
             @endforeach            
