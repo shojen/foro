@@ -1,17 +1,13 @@
 <?php
-
 namespace App;
-
 use App\Notifications\PostCommented;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Notification;
-
+use Illuminate\Foundation\Auth\User as Authenticatable;
 class User extends Authenticatable
 {
     use Notifiable;
-
     /**
      * The attributes that are mass assignable.
      *
@@ -20,7 +16,6 @@ class User extends Authenticatable
     protected $fillable = [
         'name', 'email', 'password',
     ];
-
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -29,64 +24,53 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
-
     public function posts()
     {
         return $this->hasMany(Post::class);
     }
-
     public function comments()
     {
-        return $this->hasMany(Post::class);
+        return $this->hasMany(Comment::class);
     }
-
-    public function createPost($data)
-    {
-        $post = new Post($data);
-
-        $this->posts()->save($post);
-        $this->subscribeTo($post);
-
-        return $post;
-    }
-
     public function subscriptions()
     {
-        return $this->belongsToMany(Post::class,'subscriptions');
+        return $this->belongsToMany(Post::class, 'subscriptions');
     }
-
-    public function isSubscribedTo(Post $post)
+    public function createPost(array $data)
     {
-        return $this->subscriptions()->where('post_id',$post->id)->count()>0;
+        $post = new Post($data);
+        $this->posts()->save($post);
+        $this->subscribeTo($post);
+        return $post;
     }
-
-    public function comment(Post $post,$message)
+    public function comment(Post $post, $message)
     {
-        $comment= new Comment([
-                'comment'   => $message,              
-                'post_id'   => $post->id,
-            ]);
-
+        $comment = new Comment([
+            'comment' => $message,
+            'post_id' => $post->id,
+        ]);
         $this->comments()->save($comment);
-
-        //Notify subscribers
-        Notification::send($post->subscribers()->where('users.id','!=',$this->id)->get(), new PostCommented($this,$comment));
-
+        // Notify subscribers
+        Notification::send(
+            $post->subscribers()->where('users.id', '!=', $this->id)->get(),
+            new PostCommented($comment)
+        );
         return $comment;
     }
-
+    public function isSubscribedTo(Post $post)
+    {
+        return $this->subscriptions()->where('post_id', $post->id)->count() > 0;
+    }
     public function subscribeTo(Post $post)
     {
         $this->subscriptions()->attach($post);
     }
-
     public function unsubscribeFrom(Post $post)
     {
         $this->subscriptions()->detach($post);
     }
-
     public function owns(Model $model)
-    {   
+    {
         return $this->id === $model->user_id;
     }
 }

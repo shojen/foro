@@ -13,7 +13,7 @@ class CreatePostsTest extends FeaturesTestCase
 		$title='Esta es una pregunta en el campo titulo';
 		$content='Este es el contenido en el campo content';
 
-		$this->actingAs($this->defaultUser());
+		$this->actingAs($user = $this->defaultUser());
 		//when (cuando el usuario visite a la página que es lo que hace)
 		$this->visit(route('posts.create'))
 			->type($title,'title')
@@ -25,13 +25,14 @@ class CreatePostsTest extends FeaturesTestCase
 		$this->seeInDatabase('posts',[
 				'title'		=> $title,
 				'content' 	=> $content,
+				'user_id'	=> $user->id,
 				'pending'	=> true
 			]);
 		//El usuario es redirigido al detalle del post despues de crearlo
 		//$this->see($title);
 		
 		$post = Post::first();
-
+		
 		//The author is subscrited automatically to the post
 		$this->seeInDatabase('subscriptions',[
         	'user_id'=>auth()->id(),
