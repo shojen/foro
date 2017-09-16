@@ -12,6 +12,8 @@ Route::post('posts/create', [
 		'as'=>'posts.store',
 	]);	
 
+//COMMENTS
+
 Route::post('posts/{post}/comment', [
 	'uses' => 'CommentController@store',
 	'as'	=> 'comments.store',
@@ -21,4 +23,16 @@ Route::post('comments/{comment}/accept', [
 		'uses' 	=> 'CommentController@accept',
 		'as'	=> 'comments.accept',
 	]);
-    
+  
+
+//SUBSCRIPTION  
+
+Route::post('posts/{post}/subscribe',[
+	'uses' => 'SubscriptionController@subscribe',
+	'as'	=> 'posts.subscribe'
+	]);
+
+Route::delete('posts/{post}/unsubscribe',[
+	'uses' => 'SubscriptionController@unsubscribe',
+	'as'	=> 'posts.unsubscribe'
+	]);

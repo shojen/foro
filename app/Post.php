@@ -2,6 +2,7 @@
 
 namespace App;
 
+use GrahamCampbell\Markdown\Facades\Markdown;
 use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
@@ -23,6 +24,11 @@ class Post extends Model
         return $this->hasMany(Comment::class);
     }
 
+    public function subscribers()
+    {
+        return $this->belongsToMany(User::class,'subscriptions');
+    }
+
     public function latestComments()
     {
         return $this->comments()->orderBy('created_at','DESC');
@@ -37,5 +43,10 @@ class Post extends Model
     public function getUrlAttribute()
     {
         return route('posts.show',[$this->attributes['id'],$this->attributes['slug']]);
+    }
+
+    public function getSafeHtmlContentAttribute()
+    {
+        return Markdown::convertToHtml(e($this->content));
     }
 }

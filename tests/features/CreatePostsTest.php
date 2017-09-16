@@ -1,5 +1,7 @@
 <?php 
 
+use App\Post;
+
 /**
 * 
 */
@@ -18,6 +20,7 @@ class CreatePostsTest extends FeaturesTestCase
 			->type($content,'content')
 			->press('Publicar');
 
+
 		//then (entonces el resultado de lo que ha hecho sería...)
 		$this->seeInDatabase('posts',[
 				'title'		=> $title,
@@ -25,7 +28,16 @@ class CreatePostsTest extends FeaturesTestCase
 				'pending'	=> true
 			]);
 		//El usuario es redirigido al detalle del post despues de crearlo
-		$this->see($title);
+		//$this->see($title);
+		
+		$post = Post::first();
+
+		//The author is subscrited automatically to the post
+		$this->seeInDatabase('subscriptions',[
+        	'user_id'=>auth()->id(),
+        	'post_id'=>$post->id
+        	]);
+		$this->seePageIs($post->url);
 	}
 
 	public function test_creating_a_post_requires_authentication()

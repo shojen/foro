@@ -7,13 +7,25 @@
             <div class="panel panel-default">
                 <div class="panel-heading"><h1>{{ $post->title }}</h1></div>
                 <div class="panel-body">
-                    {!! $post->content !!}
+                    {!! $post->safe_html_content !!}
                     <p>Escrito por:</p>
                     <p>{{ $post->user->name }}</p>
                 </div>
             </div>
         </div>
     </div>
+    @if(auth()->check())
+        @if(!auth()->user()->isSubscribedTo($post))
+            {!! Form::open(['route'=>['posts.subscribe',$post],'method'=>'POST']) !!}
+            {!! Form::submit('Suscribirse al post') !!}
+            {!! Form::close() !!}        
+        @else
+            {!! Form::open(['route'=>['posts.unsubscribe',$post],'method'=>'DELETE']) !!}
+            {!! Form::submit('Desuscribirse del post') !!}
+            {!! Form::close() !!}
+        @endif
+    @endif
+    
     <div class="row">
         <h4>Comentarios:</h4>
         {!! Form::open(['route'=>['comments.store',$post], 'method'=>'POST']) !!}
@@ -25,7 +37,8 @@
         
             @foreach($post->latestComments as $comment)
                 <article class="{{ $comment->answer ? 'answer' : '' }}">
-                    {{ $comment->comment }}
+                    
+                    {!! $comment->safe_html_content !!}
                     <p class="text-right">Autor: {{ $post->user->name }}</p>
                     @if(Gate::allows('accept', $comment) && !$comment->answer)
                         {!! Form::open(['route'=>['comments.accept',$comment],'method'=>'POST']) !!}
