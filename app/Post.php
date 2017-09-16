@@ -41,7 +41,7 @@ class Post extends Model
     }
 
     public function getUrlAttribute()
-    {
+    {        dd($this);
         return route('posts.show',[$this->attributes['id'],$this->attributes['slug']]);
     }
 

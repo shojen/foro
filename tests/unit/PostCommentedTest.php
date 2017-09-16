@@ -1,53 +1,41 @@
 <?php
 
-use App\Comment;
+use App\{Comment,Post,User};
 use App\Notifications\PostCommented;
-use App\Post;
-use App\User;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+//use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Notifications\Messages\MailMessage;
 
 
 class PostCommentedTest extends TestCase
 {
-	use DatabaseTransactions;
+	//use DatabaseTransactions;
     /**
 	* @test
 	**/
     public function it_builds_a_mail_message()
     {
-    	$author = factory(User::class)->create([
-    		'name' => 'Angel Rosso'
-    	]);
-
-    	$post = factory(Post::class)->create([
-    		'title' =>'Titulo del post'    		
-    	]);
-
-        $comment = factory(Comment::class)->create([
-        	'post_id' => $post->id,
-        	'user_id' => $author->id
+    	$post = new Post([
+            'title' => 'Titulo del post'
         ]);
-
+        $author = new User([
+            'name' => 'Duilio Palacios'
+        ]);
+        $comment = new Comment;
+        $comment->post = $post;
+        $comment->user = $author;
         $notification = new PostCommented($comment);
-
-        $subscriber = factory(User::class)->create();
-
+        $subscriber = new User();
         $message = $notification->toMail($subscriber);
-
-        $this->assertInstanceOf(MailMessage::class,$message);
-
+        $this->assertInstanceOf(MailMessage::class, $message);
         $this->assertSame(
-        	'Nuevo comentario en: Titulo del post',
-        	$message->subject
+            'Nuevo comentario en: Titulo del post',
+            $message->subject
         );
-
         $this->assertSame(
-        	'Angel Rosso escribió un comentario en: Titulo del post',
-        	$message->introLines[0]
+            'Duilio Palacios escribió un comentario en: Titulo del post',
+            $message->introLines[0]
         );
-
-        $this->assertSame($post->url,$message->actionUrl);
+        $this->assertSame($comment->post->url, $message->actionUrl);
 
     }
 }
