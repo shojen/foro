@@ -44,7 +44,7 @@ class PostCommented extends Notification
      */
     public function toMail($notifiable)
     {
-
+        
         return (new MailMessage)
                     ->subject("Nuevo comentario en: {$this->comment->post->title}")
                     ->line("{$this->comment->user->name} escribió un comentario en: {$this->comment->post->title}")
