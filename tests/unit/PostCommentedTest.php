@@ -17,9 +17,11 @@ class PostCommentedTest extends TestCase
     	$post = new Post([
             'title' => 'Titulo del post'
         ]);
+        
         $author = new User([
             'name' => 'Duilio Palacios'
         ]);
+
         $comment = new Comment;
         $comment->post = $post;
         $comment->user = $author;
