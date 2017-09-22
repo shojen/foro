@@ -9,7 +9,7 @@
                 <div class="panel-body">
                     {!! $post->safe_html_content !!}
                     <p>Escrito por:</p>
-                    <p>{{ $post->user->name }}</p>
+                    <p>{{ $post->user->first_name }}</p>
                 </div>
             </div>
         </div>
@@ -39,7 +39,7 @@
                 <article class="{{ $comment->answer ? 'answer' : '' }}">
                     
                     {!! $comment->safe_html_content !!}
-                    <p class="text-right">Autor: {{ $post->user->name }}</p>
+                    <p class="text-right">Autor: {{ $post->user->first_name }}</p>
                     @if(Gate::allows('accept', $comment) && !$comment->answer)
                         {!! Form::open(['route'=>['comments.accept',$comment],'method'=>'POST']) !!}
                             <button type="submit">Aceptar respuesta</button>

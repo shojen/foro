@@ -32,5 +32,12 @@ class RegisterController extends Controller
     	$user = User::create($request->all());
 
     	Token::generateFor($user)->sendByEmail();
+
+        return redirect()->route('register_confirmation');
+    }
+
+    public function confirm()
+    {
+        return view('register.confirm');
     }
 }
