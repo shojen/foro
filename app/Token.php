@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Mail\TokenMail;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Mail;
 
@@ -14,6 +15,19 @@ class Token extends Model
 	{
 		return $this->belongsTo(User::class);
 	}
+
+    public function login()
+    {
+        auth()->login($this->user);
+
+        $this->delete();
+    }
+
+    public static function findActive($token)
+    {
+
+        return static::where('token',$token)->where('created_at','>=',Carbon::parse('-30 minutes'))->first();
+    }
 
     public function getRouteKeyName()
     {
