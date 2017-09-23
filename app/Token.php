@@ -34,6 +34,11 @@ class Token extends Model
         return 'token';
     }
 
+    public function getUrlAttribute()
+    {
+        return route('login',$this->token);
+    }
+
     public static function generateFor(User $user)
     {
     	/*return static::create([
