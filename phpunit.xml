@@ -9,8 +9,9 @@
          processIsolation="false"
          stopOnFailure="false">
     <testsuites>
-        <testsuite name="Application Test Suite">
+        <testsuite name="App">
             <directory suffix="Test.php">./tests</directory>
+            <exclude>./tests/Browser</exclude>
         </testsuite>
     </testsuites>
     <filter>
@@ -20,7 +21,7 @@
     </filter>
     <php>
         <env name="APP_ENV" value="testing"/>
-        <env name="APP_URL" value="http://localhost"></env>
+        <env name="APP_URL" value="http://devforo.io"></env>
         <env name="CACHE_DRIVER" value="array"/>
         <env name="SESSION_DRIVER" value="array"/>
         <env name="QUEUE_DRIVER" value="sync"/>

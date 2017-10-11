@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Post extends Model
 {
     
-    protected $fillable=['title','content'];
+    protected $fillable=['title','content','category_id'];
 
     protected $casts=[
         'pending' => 'boolean'
@@ -22,6 +22,11 @@ class Post extends Model
     public function comments()
     {
         return $this->hasMany(Comment::class);
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
     }
 
     public function subscribers()
@@ -48,5 +53,21 @@ class Post extends Model
     public function getSafeHtmlContentAttribute()
     {
         return Markdown::convertToHtml(e($this->content));
+    }
+
+    public function scopeCategory($query,Category $category)
+    {
+        if($category->exists)
+        {
+            $query->where('category_id',$category->id);
+        }
+    }
+    public function scopePending($query)
+    {
+        $query->where('pending',true);
+    }
+    public function scopeCompleted($query)
+    {
+        $query->where('pending',false);
     }
 }

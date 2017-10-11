@@ -11,15 +11,26 @@
 |
 */
 
-Route::get('/', [
-	'uses' => 'PostController@index',
-	'as'	=> 'posts.index'
-	]);
+
 
 Route::get('/home', 'HomeController@index');
 
-Route::get('post/{post}-{slug}',[
+Route::get('posts/{post}-{slug}',[
 	'as' => 'posts.show',
 	'uses' => 'PostController@show'])->where('post','[0-9]+');
 
 
+Route::get('posts-pendientes/{category?}', [
+	'uses' => 'PostController@index',
+	'as' => 'posts.pending'
+]);
+
+Route::get('posts-completados/{category?}', [
+	'uses' => 'PostController@index',
+	'as' => 'posts.completed'
+]);
+
+Route::get('{category?}', [
+	'uses' => 'PostController@index',
+	'as'	=> 'posts.index'
+	]);

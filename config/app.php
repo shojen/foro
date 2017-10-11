@@ -168,7 +168,8 @@ return [
          */
 
         Styde\Html\HtmlServiceProvider::class,
-        GrahamCampbell\Markdown\MarkdownServiceProvider::class,        
+        GrahamCampbell\Markdown\MarkdownServiceProvider::class, 
+        Laravel\Tinker\TinkerServiceProvider::class,       
 
         /*
          * Application Service Providers...

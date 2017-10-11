@@ -1,5 +1,6 @@
 <?php 
 
+use App\Category;
 use App\Post;
 
 /**
@@ -14,10 +15,14 @@ class CreatePostsTest extends FeaturesTestCase
 		$content='Este es el contenido en el campo content';
 
 		$this->actingAs($user = $this->defaultUser());
+
+		$category=factory(Category::class)->create();
+
 		//when (cuando el usuario visite a la página que es lo que hace)
 		$this->visit(route('posts.create'))
 			->type($title,'title')
 			->type($content,'content')
+			->select($category->id,'category_id')
 			->press('Publicar');
 
 
@@ -26,7 +31,8 @@ class CreatePostsTest extends FeaturesTestCase
 				'title'		=> $title,
 				'content' 	=> $content,
 				'user_id'	=> $user->id,
-				'pending'	=> true
+				'pending'	=> true,
+				'category_id'=>$category->id,
 			]);
 		//El usuario es redirigido al detalle del post despues de crearlo
 		//$this->see($title);

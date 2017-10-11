@@ -1,11 +1,9 @@
 <?php
 
 use App\User;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class RegisterValidatedTest extends TestCase
+class RegisterValidatedTest extends FeaturesTestCase
 {
-	use DatabaseTransactions;
 	
     public function test_the_inputs_cant_leave_empty()
     {
