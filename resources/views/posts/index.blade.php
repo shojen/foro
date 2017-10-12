@@ -9,13 +9,7 @@
 </div>
 
 <div class="row">
-	<aside class="col-md-2">
-		<h3>Filtros</h3>
-		{!! Menu::make(trans('menu.filters'),'nav filters') !!}
-		<h3>Categorías</h3>
-		{!! Menu::make($categoryItems,'nav categories') !!}
-		
-	</aside>
+	@include('posts.sidebar')
 	<section class="col-md-10">
 			{!! Form::open(['method'=>'get','class'=>'form form-inline']) !!}
 				{!! Form::select('orden', trans('options.posts-order'), request('orden'), ['class'=>'form-control']) !!}

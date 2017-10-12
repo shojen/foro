@@ -24,23 +24,13 @@ class ListPostController extends Controller
                     ->paginate();
 
         $posts->appends(request()->intersect(['orden']));
-
-        $categoryItems=$this->getCategoryItems($routeName);
+        
 		
 		return view('posts.index')->with(compact('posts','categoryItems','category','filters'));
 	}
 
 
-    protected function getCategoryItems(string $routeName)
-    {
-        return Category::orderBy('name')->get()->map(function($category) use($routeName){
-           return [ 
-                    'title' => $category->name,
-                    'full_url' => route($routeName,$category),
-                ];
-
-        })->toArray();
-    }
+    
 
     protected function getListScopes(Category $category,string $routeName)
     {
