@@ -17,12 +17,14 @@
 		
 	</aside>
 	<section class="col-md-10">
+			{!! Form::open(['method'=>'get','class'=>'form form-inline']) !!}
+				{!! Form::select('orden', trans('options.posts-order'), request('orden'), ['class'=>'form-control']) !!}
+				{!! Form::submit('Ordenar', ['class'=>'btn btn-default']) !!}
+			{!! Form::close() !!}
+
 			@each('posts.item',$posts,'post')
 			
-			
-		
-
-		{!! $posts->links() !!}
+		{!! $posts->render() !!}
 		
 	</section>
 	
