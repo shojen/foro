@@ -19,7 +19,8 @@ class ListPostController extends Controller
             'Posts Completados'=>['full_url'=>route('posts.completed')]
         ]; 
 
-		$posts=Post::scopes($this->getListScopes($category,$request))
+		$posts=Post::with(['user','category'])
+                    ->scopes($this->getListScopes($category,$request))
                     ->orderBy($orderColumn,$orderDirection)                    
                     ->paginate()
                     ->appends($request->intersect(['orden']));
