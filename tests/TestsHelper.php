@@ -17,6 +17,11 @@ trait TestsHelper
 
         return $this->defaultUser= factory(User::class)->create($attributes);
     }
+    
+    protected function anyone(array $attributes = [])
+    {
+        return factory(User::class)->create($attributes);
+    }
 
     public function createPost(array $attributes=[])
     {

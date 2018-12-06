@@ -20,7 +20,8 @@ class ListPostController extends Controller
         ]; 
 
 		$posts=Post::with(['user','category'])
-                    ->scopes($this->getListScopes($category,$request))
+                    ->category($category)                    
+                    ->scopes($this->getRouteScope($request))
                     ->orderBy($orderColumn,$orderDirection)                    
                     ->paginate()
                     ->appends($request->intersect(['orden']));
@@ -30,47 +31,28 @@ class ListPostController extends Controller
 	}
 
 
-    
-
-    protected function getListScopes(Category $category,Request $request)
+    protected function getRouteScope(Request $request)
     {
-        $scopes=[];
+        $scopes = [
+            'posts.mine' => ['byUser'=>[$request->user()]],
+            'posts.pending' => ['pending'],
+            'posts.completed' => ['completed']
+        ];
 
-        $routeName= $request->route()->getName();
-
-        if($category->exists)
-        {
-            $scopes['category']=[$category];
-        }    
-
-        if($routeName=='posts.mine')
-        {
-            $scopes['byUser']=[auth()->user()];
-        }    
-
-        if($routeName=='posts.pending')
-        {
-            $scopes[] = 'pending';
-        }
-        elseif ($routeName=='posts.completed') {
-            $scopes[] = 'completed';
-        }
-
-        return $scopes;
+        //return isset($scopes[$name])? $scopes[$name] : [];
+        return $scopes[$request->route()->getName()] ?? [];
     }
 
     protected function getListOrder($order)
     {
-        if($order=='recientes')
-        {
-            return ['created_at','desc'];
-        }
 
-        if($order=='antiguos')
-        {
-            return ['created_at','asc'];
-        }
+        $orders = [
+            'recientes' => ['created_at','desc'],
+            'antiguos' => ['created_at','asc'],
+        ];
 
-        return ['created_at','desc'];
+        return $orders[$order] ?? ['created_at','desc'];
+
+        
     }
 }

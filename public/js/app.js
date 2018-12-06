@@ -797,7 +797,8 @@ window.Vue = __webpack_require__(35);
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('example', __webpack_require__(36));
+//Vue.component('example', require('./components/Example.vue'));
+Vue.component('app-vote', __webpack_require__(36));
 
 var app = new Vue({
   el: '#app'
@@ -41911,9 +41912,9 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources\\assets\\js\\components\\Example.vue"
+Component.options.__file = "resources/assets/js/components/vote.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] Example.vue: functional components are not supported with templates, they should use render functions.")}
+if (Component.options.functional) {console.error("[vue-loader] vote.vue: functional components are not supported with templates, they should use render functions.")}
 
 /* hot reload */
 if (false) {(function () {
@@ -41922,9 +41923,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-48221a40", Component.options)
+    hotAPI.createRecord("data-v-040cf9e4", Component.options)
   } else {
-    hotAPI.reload("data-v-48221a40", Component.options)
+    hotAPI.reload("data-v-040cf9e4", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -42047,17 +42048,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    mounted: function mounted() {
-        console.log('Component mounted.');
-    }
+	props: ['score', 'vote'],
+	methods: {
+		upvote: function upvote() {
+			axios.post(window.location.href + '/upvote');
+		},
+		downvote: function downvote() {
+			axios.post(window.location.href + '/downvote');
+		}
+	}
+
 });
 
 /***/ }),
@@ -42068,38 +42070,50 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "container" }, [
-      _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "col-md-8 col-md-offset-2" }, [
-          _c("div", { staticClass: "panel panel-default" }, [
-            _c("div", { staticClass: "panel-heading" }, [
-              _vm._v("Example Component")
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "panel-body" }, [
-              _vm._v(
-                "\n                    I'm an example component!\n                "
-              )
-            ])
-          ])
-        ])
-      ])
+  return _c("div", [
+    _c("form", [
+      _c(
+        "button",
+        {
+          staticClass: "btn",
+          class: _vm.vote == 1 ? "btn-primary" : "btn-default",
+          on: {
+            click: function($event) {
+              $event.preventDefault()
+              _vm.upvote($event)
+            }
+          }
+        },
+        [_vm._v("+1")]
+      ),
+      _vm._v("\n        Puntuación actual: "),
+      _c("strong", { attrs: { id: "current-score" } }, [
+        _vm._v(_vm._s(_vm.score))
+      ]),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-default",
+          on: {
+            click: function($event) {
+              $event.preventDefault()
+              _vm.downvote($event)
+            }
+          }
+        },
+        [_vm._v("-1")]
+      )
     ])
-  }
-]
+  ])
+}
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-48221a40", module.exports)
+     require("vue-hot-reload-api").rerender("data-v-040cf9e4", module.exports)
   }
 }
 

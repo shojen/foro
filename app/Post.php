@@ -7,11 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
+    use CanBeVoted;
     
     protected $fillable=['title','content','category_id'];
 
     protected $casts=[
-        'pending' => 'boolean'
+        'pending' => 'boolean',
+        'score' => 'integer'
     ];
 
     public function user()
@@ -75,4 +77,5 @@ class Post extends Model
     {
         $query->where('user_id',$user->id);
     }
+
 }
